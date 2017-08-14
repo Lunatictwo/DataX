@@ -89,7 +89,8 @@
         <module>plugin-unstructured-storage-util</module>
         <!-- developing module -->
         <module>hbasewriter</module>
-  </modules>
+        <module>es5xwriter</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>
