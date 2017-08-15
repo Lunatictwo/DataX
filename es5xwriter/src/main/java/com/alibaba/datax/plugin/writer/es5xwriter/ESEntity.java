@@ -4,10 +4,12 @@ package com.alibaba.datax.plugin.writer.es5xwriter;
  * Created by zehui on 2017/8/14.
  */
 public class ESEntity {
-    private String id;
-    private String column1;
-    private String column2;
-    private String column3;
+    /**
+     * 显式声明transient 说明该字段不需要进行序列化，
+     * 否则在使用Gson的时候会和子类的id产生冲突 但是子类也需要该字段
+     * 一些敏感数据字段也可以通过该方法禁止进行序列化
+     */
+    private transient String id;
 
     public String getId() {
         return id;
@@ -17,27 +19,4 @@ public class ESEntity {
         this.id = id;
     }
 
-    public String getColumn1() {
-        return column1;
-    }
-
-    public void setColumn1(String column1) {
-        this.column1 = column1;
-    }
-
-    public String getColumn2() {
-        return column2;
-    }
-
-    public void setColumn2(String column2) {
-        this.column2 = column2;
-    }
-
-    public String getColumn3() {
-        return column3;
-    }
-
-    public void setColumn3(String column3) {
-        this.column3 = column3;
-    }
 }
