@@ -5,6 +5,7 @@ import com.alibaba.datax.common.plugin.RecordReceiver;
 import com.alibaba.datax.common.spi.Writer;
 import com.alibaba.datax.common.util.Configuration;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.client.transport.TransportClient;
@@ -15,9 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -94,6 +97,7 @@ public class ES5xWriter extends Writer {
 
         private String className = null;
 
+        //Gson序列化的时候限制格式，使用GsonBuilder
         private Gson gson = null;
 
         private TransportClient client = null;
@@ -102,7 +106,7 @@ public class ES5xWriter extends Writer {
 
         private static final Logger LOG = LoggerFactory.getLogger(Task.class);
 
-        private DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        private DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         @Override
         public void init() {
@@ -117,7 +121,9 @@ public class ES5xWriter extends Writer {
             attributeNames = attributeNameString.split(attributeNameSplit);
             this.className = writerSliceConfiguration.getString(Key.className);
             this.batchSize = writerSliceConfiguration.getInt(Key.batchSize, 1000);
-            this.gson = new Gson();
+            this.gson = new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                    .create();
         }
 
         @Override
@@ -181,6 +187,7 @@ public class ES5xWriter extends Writer {
         private void bulkSaveOrUpdateES(List<Record> writerBuffer) {
             Record record = null;
             Object object = null;
+            Object value = null;
             Map<String, String> attributeValueMap = null;
             List<ESEntity> entities = new ArrayList<ESEntity>();
             try {
@@ -210,7 +217,11 @@ public class ES5xWriter extends Writer {
                             if (!attributeValueMap.containsKey(fieldNameLowerCase)) continue;
                             String valueString = attributeValueMap.get(fieldNameLowerCase);
                             LOG.info(valueString);
-                            Object value = convertValueByFieldType(field.getType(), valueString);
+                            try {
+                                value = convertValueByFieldType(field.getType(), valueString);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             if (field.isAccessible()) { // if field is private or public
                                 field.set(object, value);
                             } else {
@@ -235,6 +246,9 @@ public class ES5xWriter extends Writer {
             for (ESEntity entity : entities) {
                 IndexRequestBuilder indexRequestBuilder = this.client.prepareIndex()
                         .setIndex(esIndex).setType(esIndex).setId(entity.getId()).setSource(gson.toJson(entity));
+                LOG.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+                LOG.info(gson.toJson(entity));
+                LOG.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
                 prepareBulk.add(indexRequestBuilder);
 //                entity.remove_id();
 //                String source = gson.toJson(entity);
@@ -245,7 +259,7 @@ public class ES5xWriter extends Writer {
             prepareBulk.execute().actionGet();
         }
 
-        private Object convertValueByFieldType(Class<?> type, Object value) {
+        private Object convertValueByFieldType(Class<?> type, Object value) throws ParseException {
             Object finalValue = value;
             if (String.class.isAssignableFrom(type)) {
                 finalValue = (null == value) ? "NA" : String.valueOf(value);
@@ -260,8 +274,9 @@ public class ES5xWriter extends Writer {
             } else if (Double.class.isAssignableFrom(type)) {
                 finalValue = (null == value) ? 0 : Double.parseDouble(String.valueOf(value));
             } else if (Date.class.isAssignableFrom(type)) {
-                value = (null == value) ? new Date() : value;
-                finalValue = format.format(value);
+                finalValue = (null == value) ? null : format.parse((String) value);
+            } else if (BigDecimal.class.isAssignableFrom(type)) {
+                finalValue = (null == value) ? new BigDecimal("0") : new BigDecimal(String.valueOf(value));
             }
             return finalValue;
         }

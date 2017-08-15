@@ -90,6 +90,7 @@
         <!-- developing module -->
         <!--<module>hbasewriter</module>-->
         <module>es5xwriter</module>
+
     </modules>
 
     <dependencyManagement>
