@@ -19,4 +19,6 @@ public class ESEntity {
         this.id = id;
     }
 
+
+
 }

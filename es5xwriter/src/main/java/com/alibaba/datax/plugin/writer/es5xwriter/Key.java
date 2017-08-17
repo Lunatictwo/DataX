@@ -23,6 +23,12 @@ public final class Key {
     public final static String esClusterPort = "esClusterPort";
 
     /*
+     * @name:  esClusterPort
+     * @description:  elastic search cluster port
+    */
+    public final static String esEnableSniff = "esEnableSniff";
+
+    /*
      * @name: esIndex
      * @description:  elastic search index
      */

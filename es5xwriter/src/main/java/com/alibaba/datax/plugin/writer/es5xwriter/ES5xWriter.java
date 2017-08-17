@@ -6,6 +6,8 @@ import com.alibaba.datax.common.spi.Writer;
 import com.alibaba.datax.common.util.Configuration;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.client.transport.TransportClient;
@@ -85,6 +87,8 @@ public class ES5xWriter extends Writer {
 
         private Integer esClusterPort = null;
 
+        private Boolean esEnableSniff = null;
+
         private String esIndex = null;
 
         private String esType = null;
@@ -99,6 +103,7 @@ public class ES5xWriter extends Writer {
 
         //Gson序列化的时候限制格式，使用GsonBuilder
         private Gson gson = null;
+        private JsonParser jsonParser = null;
 
         private TransportClient client = null;
 
@@ -114,6 +119,7 @@ public class ES5xWriter extends Writer {
             this.esClusterName = writerSliceConfiguration.getString(Key.esClusterName);
             this.esClusterIP = writerSliceConfiguration.getString(Key.esClusterIP);
             this.esClusterPort = writerSliceConfiguration.getInt(Key.esClusterPort, 9300);
+            this.esEnableSniff = writerSliceConfiguration.getBool(Key.esEnableSniff, false);
             this.esIndex = writerSliceConfiguration.getString(Key.esIndex);
             this.esType = writerSliceConfiguration.getString(Key.esType);
             this.attributeNameString = writerSliceConfiguration.getString(Key.attributeNameString);
@@ -124,6 +130,7 @@ public class ES5xWriter extends Writer {
             this.gson = new GsonBuilder()
                     .setDateFormat("yyyy-MM-dd HH:mm:ss")
                     .create();
+            this.jsonParser = new JsonParser();
         }
 
         @Override
@@ -131,12 +138,12 @@ public class ES5xWriter extends Writer {
             super.prepare();
             try {
                 Settings esSettings = Settings.builder()
-                        .put("cluster.name", "my-application") //设置ES实例的名称
+                        .put("cluster.name", this.esClusterName) //设置ES实例的名称
                         .put("client.transport.sniff", false) //自动嗅探整个集群的状态，把集群中其他ES节点的ip添加到本地的客户端列表中(外网连接请置为false)
                         .build();
                 this.client = new PreBuiltTransportClient(esSettings);//初始化client较老版本发生了变化，此方法有几个重载方法，初始化插件等。
                 //此步骤添加IP，至少一个，其实一个就够了，因为添加了自动嗅探配置
-                client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("127.0.0.1"), 9300));
+                client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(this.esClusterIP), this.esClusterPort));
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
@@ -194,29 +201,21 @@ public class ES5xWriter extends Writer {
                 for (int w = 0, wlen = writerBuffer.size(); w < wlen; w++) {
                     //此时获取到record为DataX中的数据类型
                     record = writerBuffer.get(w);
-                    LOG.info("---------------------------------single record---------------------------------------");
                     object = Class.forName(className).newInstance();
                     int fieldNum = record.getColumnNumber();
                     if (null != record && fieldNum > 0) {
-                        LOG.info(record.toString());//单条数据
-                        LOG.info(String.valueOf(fieldNum));//单条数据中的字段数
                         attributeValueMap = new HashMap<String, String>();
                         for (int i = 0; i < fieldNum; i++) {
                             attributeValueMap.put(attributeNames[i].toLowerCase(), record.getColumn(i).asString());
                         }
-                        LOG.info(attributeValueMap.toString());
                         Class<?> superClass = object.getClass();
                         Field[] fields = superClass.getDeclaredFields();
-                        LOG.info(String.valueOf(fields.length));
-                        LOG.info(String.valueOf(fields));
                         for (int i = 0, len = fields.length; i < len; i++) {
                             Field field = fields[i];
                             String fieldNameLowerCase = field.getName().toLowerCase();
-                            LOG.info(fieldNameLowerCase);
                             //如果实体类不包含该列字段，continue
                             if (!attributeValueMap.containsKey(fieldNameLowerCase)) continue;
                             String valueString = attributeValueMap.get(fieldNameLowerCase);
-                            LOG.info(valueString);
                             try {
                                 value = convertValueByFieldType(field.getType(), valueString);
                             } catch (Exception e) {
@@ -245,16 +244,11 @@ public class ES5xWriter extends Writer {
             BulkRequestBuilder prepareBulk = client.prepareBulk();
             for (ESEntity entity : entities) {
                 IndexRequestBuilder indexRequestBuilder = this.client.prepareIndex()
-                        .setIndex(esIndex).setType(esIndex).setId(entity.getId()).setSource(gson.toJson(entity));
-                LOG.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-                LOG.info(gson.toJson(entity));
-                LOG.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+                        .setIndex(esIndex).setType(esIndex).setId(entity.getId());
+                JsonObject entityJsonObj = jsonParser.parse(gson.toJson(entity)).getAsJsonObject();
+                entityJsonObj.remove("id");
+                indexRequestBuilder.setSource(gson.toJson(entityJsonObj));
                 prepareBulk.add(indexRequestBuilder);
-//                entity.remove_id();
-//                String source = gson.toJson(entity);
-//                irb.setSource(source);
-//                prepareBulk.add(irb);
-//                LOG.info(entity.toString());
             }
             prepareBulk.execute().actionGet();
         }
