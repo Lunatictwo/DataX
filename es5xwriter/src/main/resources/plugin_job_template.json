@@ -4,6 +4,7 @@
     "esClusterName": "",
     "esClusterIP": "192.168.0.2",
     "esClusterPort": "9300",
+    "esEnableSniff": false,
     "esIndex": "user",
     "esType": "student",
     "attributeNameString": "id,column1,column2,column3",

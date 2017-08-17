@@ -96,6 +96,7 @@ public class DataLineItemEntity extends ESEntity {
     private BigDecimal ele_freight;
     private BigDecimal ele_insurance;
 
+
     @Override
     public String getId() {
         return id;
