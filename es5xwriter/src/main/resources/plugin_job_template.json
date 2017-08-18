@@ -10,6 +10,7 @@
     "attributeNameString": "id,column1,column2,column3",
     "attributeNameSplit": ",",
     "className": "com.alibaba.datax.plugin.writer.es5xwriter.Student",
+    "urlFieldToParseJson": "data_str",
     "batchSize": "1000"
   }
 }
