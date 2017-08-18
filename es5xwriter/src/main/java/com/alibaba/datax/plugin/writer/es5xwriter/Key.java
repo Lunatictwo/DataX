@@ -64,6 +64,11 @@ public final class Key {
      */
     public final static String urlFieldToParseJson = "urlFieldToParseJson";
 
+    /*
+     * @name: timeField
+     * @description: field need to be parsed
+     */
+    public final static String timeField = "timeField";
 
     /*
      * @name: batchSize

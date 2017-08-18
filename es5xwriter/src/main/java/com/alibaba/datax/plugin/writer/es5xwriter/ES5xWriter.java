@@ -30,6 +30,7 @@ import java.util.*;
 
 /**
  * Created by zehui on 2017/8/14.
+ * TODO:ES mapping 设置日期字段测试
  */
 public class ES5xWriter extends Writer {
     public static class Job extends Writer.Job {
@@ -117,6 +118,8 @@ public class ES5xWriter extends Writer {
 
         private String urlFieldToParseJson = null;
 
+        private String timeField = null;
+
         @Override
         public void init() {
             this.writerSliceConfiguration = super.getPluginJobConf();
@@ -136,6 +139,7 @@ public class ES5xWriter extends Writer {
                     .create();
             this.jsonParser = new JsonParser();
             this.urlFieldToParseJson = writerSliceConfiguration.getString(Key.urlFieldToParseJson, "");
+            this.timeField = writerSliceConfiguration.getString(Key.timeField, "");
         }
 
         @Override
@@ -265,6 +269,9 @@ public class ES5xWriter extends Writer {
                         .setIndex(esIndex).setType(esIndex).setId(entity.getId());
                 JsonObject entityJsonObj = jsonParser.parse(gson.toJson(entity)).getAsJsonObject();
                 entityJsonObj.remove("id");
+                if (!"".equals(this.timeField)) {
+                    entityJsonObj.add("@timestamp", entityJsonObj.get(this.timeField));
+                }
                 indexRequestBuilder.setSource(gson.toJson(entityJsonObj));
                 LOG.info(gson.toJson(entityJsonObj));
                 prepareBulk.add(indexRequestBuilder);
@@ -294,6 +301,8 @@ public class ES5xWriter extends Writer {
             return finalValue;
         }
     }
+
+
 
 
 }
