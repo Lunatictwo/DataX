@@ -4,6 +4,7 @@ import com.alibaba.datax.common.element.Record;
 import com.alibaba.datax.common.plugin.RecordReceiver;
 import com.alibaba.datax.common.spi.Writer;
 import com.alibaba.datax.common.util.Configuration;
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.net.InetAddress;
+import java.net.URLDecoder;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -113,6 +115,8 @@ public class ES5xWriter extends Writer {
 
         private DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        private String urlFieldToParseJson = null;
+
         @Override
         public void init() {
             this.writerSliceConfiguration = super.getPluginJobConf();
@@ -131,6 +135,7 @@ public class ES5xWriter extends Writer {
                     .setDateFormat("yyyy-MM-dd HH:mm:ss")
                     .create();
             this.jsonParser = new JsonParser();
+            this.urlFieldToParseJson = writerSliceConfiguration.getString(Key.urlFieldToParseJson, "");
         }
 
         @Override
@@ -210,14 +215,27 @@ public class ES5xWriter extends Writer {
                         }
                         Class<?> superClass = object.getClass();
                         Field[] fields = superClass.getDeclaredFields();
-                        for (int i = 0, len = fields.length; i < len; i++) {
-                            Field field = fields[i];
+                        for (Field field : fields) {
                             String fieldNameLowerCase = field.getName().toLowerCase();
-                            //如果实体类不包含该列字段，continue
-                            if (!attributeValueMap.containsKey(fieldNameLowerCase)) continue;
+                            //如果配置中未填写类的该列字段，跳过
+                            if (!attributeValueMap.containsKey(fieldNameLowerCase)) {
+                                continue;
+                            }
                             String valueString = attributeValueMap.get(fieldNameLowerCase);
                             try {
-                                value = convertValueByFieldType(field.getType(), valueString);
+                                //如果是需要解析Json的字段，解析为Json
+                                if (this.urlFieldToParseJson.equals(fieldNameLowerCase)) {
+                                    //url 转码
+                                    valueString = URLDecoder.decode(valueString, "utf-8");
+                                    String[] paramTuples = valueString.split("&");
+                                    JSONObject jsonObject = new JSONObject();
+                                    for (String singleTuple : paramTuples) {
+                                        jsonObject.put(singleTuple.split("=", -1)[0], singleTuple.split("=", -1)[1]);
+                                    }
+                                    value = jsonObject;
+                                } else {
+                                    value = convertValueByFieldType(field.getType(), valueString);
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -248,6 +266,7 @@ public class ES5xWriter extends Writer {
                 JsonObject entityJsonObj = jsonParser.parse(gson.toJson(entity)).getAsJsonObject();
                 entityJsonObj.remove("id");
                 indexRequestBuilder.setSource(gson.toJson(entityJsonObj));
+                LOG.info(gson.toJson(entityJsonObj));
                 prepareBulk.add(indexRequestBuilder);
             }
             prepareBulk.execute().actionGet();
