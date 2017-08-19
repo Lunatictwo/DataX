@@ -266,7 +266,7 @@ public class ES5xWriter extends Writer {
             BulkRequestBuilder prepareBulk = client.prepareBulk();
             for (ESEntity entity : entities) {
                 IndexRequestBuilder indexRequestBuilder = this.client.prepareIndex()
-                        .setIndex(esIndex).setType(esIndex).setId(entity.getId());
+                        .setIndex(esIndex).setType(esType).setId(entity.getId());
                 JsonObject entityJsonObj = jsonParser.parse(gson.toJson(entity)).getAsJsonObject();
                 entityJsonObj.remove("id");
                 if (!"".equals(this.timeField)) {
