@@ -273,7 +273,7 @@ public class ES5xWriter extends Writer {
                     entityJsonObj.add("@timestamp", entityJsonObj.get(this.timeField));
                 }
                 indexRequestBuilder.setSource(gson.toJson(entityJsonObj));
-                LOG.info(gson.toJson(entityJsonObj));
+//                LOG.info(gson.toJson(entityJsonObj));
                 prepareBulk.add(indexRequestBuilder);
             }
             prepareBulk.execute().actionGet();
