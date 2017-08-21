@@ -234,7 +234,8 @@ public class ES5xWriter extends Writer {
                                         jsonObject.put(singleTuple.split("=", -1)[0], singleTuple.split("=", -1)[1]);
                                     }
                                     // 业务逻辑hard code,如果agency为空并且campaign以`+`开头，用campaign的头补齐
-                                    if ("null".equals(jsonObject.get("agency")) && "+".equals(jsonObject.get("campaign").toString().substring(0, 1))) {
+                                    if (jsonObject.containsKey("agency") && jsonObject.containsKey("campaign") && "null".equals(jsonObject.get("agency")) && jsonObject.get("campaign").toString().length() > 0 && "+".equals(jsonObject.get("campaign").toString().substring(0, 1))) {
+
                                         String tmpStr = jsonObject.get("campaign").toString();
                                         jsonObject.put("agency", tmpStr.substring(tmpStr.indexOf("+") + 1, tmpStr.indexOf("_")).toLowerCase());
                                     }
