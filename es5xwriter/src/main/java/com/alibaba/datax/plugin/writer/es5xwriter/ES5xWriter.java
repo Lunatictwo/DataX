@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
@@ -276,7 +277,10 @@ public class ES5xWriter extends Writer {
 //                LOG.info(gson.toJson(entityJsonObj));
                 prepareBulk.add(indexRequestBuilder);
             }
-            prepareBulk.execute().actionGet();
+            BulkResponse bulkResponse = prepareBulk.execute().actionGet();
+            LOG.info("----------------------");
+            LOG.info(bulkResponse.buildFailureMessage());
+            LOG.info("----------------------");
         }
 
         private Object convertValueByFieldType(Class<?> type, Object value) throws ParseException {
@@ -301,8 +305,6 @@ public class ES5xWriter extends Writer {
             return finalValue;
         }
     }
-
-
 
 
 }
