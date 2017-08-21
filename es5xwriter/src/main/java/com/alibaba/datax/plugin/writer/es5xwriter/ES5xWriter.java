@@ -250,6 +250,7 @@ public class ES5xWriter extends Writer {
                                 field.setAccessible(false);
                             }
                         }
+                        entities.add((ESEntity) object);
                     }
                 }
             } catch (Exception e) {
