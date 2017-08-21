@@ -30,7 +30,6 @@ import java.util.*;
 
 /**
  * Created by zehui on 2017/8/14.
- * TODO:ES mapping 设置日期字段测试
  */
 public class ES5xWriter extends Writer {
     public static class Job extends Writer.Job {
@@ -234,6 +233,11 @@ public class ES5xWriter extends Writer {
                                     for (String singleTuple : paramTuples) {
                                         jsonObject.put(singleTuple.split("=", -1)[0], singleTuple.split("=", -1)[1]);
                                     }
+                                    // 业务逻辑hard code,如果agency为空并且campaign以`+`开头，用campaign的头补齐
+                                    if ("null".equals(jsonObject.get("agency")) && "+".equals(jsonObject.get("campaign").toString().substring(0, 1))) {
+                                        String tmpStr = jsonObject.get("campaign").toString();
+                                        jsonObject.put("agency", tmpStr.substring(tmpStr.indexOf("+") + 1, tmpStr.indexOf("_")).toLowerCase());
+                                    }
                                     value = jsonObject;
                                 } else {
                                     value = convertValueByFieldType(field.getType(), valueString);
@@ -249,7 +253,6 @@ public class ES5xWriter extends Writer {
                                 field.setAccessible(false);
                             }
                         }
-                        entities.add((ESEntity) object);
                     }
                 }
             } catch (Exception e) {
@@ -299,8 +302,6 @@ public class ES5xWriter extends Writer {
             return finalValue;
         }
     }
-
-
 
 
 }
