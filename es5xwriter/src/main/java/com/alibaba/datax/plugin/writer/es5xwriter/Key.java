@@ -63,7 +63,7 @@ public final class Key {
      * @description: field need to be parsed
      */
     public final static String urlFieldToParseJson = "urlFieldToParseJson";
-
+    
     /*
      * @name: timeField
      * @description: field need to be parsed

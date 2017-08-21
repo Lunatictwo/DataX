@@ -31,7 +31,6 @@ import java.util.*;
 
 /**
  * Created by zehui on 2017/8/14.
- * TODO:ES mapping 设置日期字段测试
  */
 public class ES5xWriter extends Writer {
     public static class Job extends Writer.Job {
@@ -230,13 +229,12 @@ public class ES5xWriter extends Writer {
                             try {
                                 //如果是需要解析Json的字段，解析为Json
                                 if (this.urlFieldToParseJson.equals(fieldNameLowerCase)) {
-                                    //url 转码
-                                    valueString = URLDecoder.decode(valueString, "utf-8");
                                     String[] paramTuples = valueString.split("&");
                                     JSONObject jsonObject = new JSONObject();
                                     for (String singleTuple : paramTuples) {
                                         jsonObject.put(singleTuple.split("=", -1)[0], singleTuple.split("=", -1)[1]);
                                     }
+
                                     value = jsonObject;
                                 } else {
                                     value = convertValueByFieldType(field.getType(), valueString);
@@ -252,7 +250,6 @@ public class ES5xWriter extends Writer {
                                 field.setAccessible(false);
                             }
                         }
-                        entities.add((ESEntity) object);
                     }
                 }
             } catch (Exception e) {
