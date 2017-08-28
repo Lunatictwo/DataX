@@ -17,6 +17,24 @@ public class DataAppsFlyerInfoEntity extends ESEntity {
     private String version_code;
     private String af_id;
     private JSONObject data_str;
+    private String user_status;
+    private Double limit_amount;
+
+    public String getUser_status() {
+        return user_status;
+    }
+
+    public void setUser_status(String user_status) {
+        this.user_status = user_status;
+    }
+
+    public Double getLimit_amount() {
+        return limit_amount;
+    }
+
+    public void setLimit_amount(Double limit_amount) {
+        this.limit_amount = limit_amount;
+    }
 
     public String getId() {
         return id;
