@@ -11,6 +11,7 @@ import java.util.Date;
 public class DataLineItemEntity extends ESEntity {
     private String id;
     private String uid;
+    private String type;
     private String sku_id;
     private Integer qty;
     private String vendor_id;
@@ -50,7 +51,7 @@ public class DataLineItemEntity extends ESEntity {
     private Date user_create_time;
     private Date user_last_login_time;
     private Date user_active_time;
-    private String channel;
+    private String user_channel;
     private Date user_application_time;
     private Integer user_call_status;
     private BigDecimal po_down_payment;
@@ -72,11 +73,13 @@ public class DataLineItemEntity extends ESEntity {
     private BigDecimal coupon_from_currency;
     private Integer coupon_action;
     private BigDecimal coupon_trigger_amount;
+    private Date coupon_create_time;
+    private Date coupon_update_time;
+    private String coupon_status;
     private Boolean address_is_default;
     private Integer address_status;
     private Date address_create_time;
     private String address_area_id;
-    private Integer so_status;
     private Date so_delivery_time;
     private Date so_create_time;
     private String so_tracking_num;
@@ -88,6 +91,8 @@ public class DataLineItemEntity extends ESEntity {
     private String cr_tree_id;
     private String cr_parent_id;
     private Integer cr_level;
+    private String category_name;
+    private String category_type;
     private String cvs_name;
     private Integer daigou_shop;
     private String daigou_category;
@@ -95,7 +100,6 @@ public class DataLineItemEntity extends ESEntity {
     private BigDecimal ele_price;
     private BigDecimal ele_freight;
     private BigDecimal ele_insurance;
-
 
     @Override
     public String getId() {
@@ -113,6 +117,14 @@ public class DataLineItemEntity extends ESEntity {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getSku_id() {
@@ -427,12 +439,12 @@ public class DataLineItemEntity extends ESEntity {
         this.user_active_time = user_active_time;
     }
 
-    public String getChannel() {
-        return channel;
+    public String getUser_channel() {
+        return user_channel;
     }
 
-    public void setChannel(String channel) {
-        this.channel = channel;
+    public void setUser_channel(String user_channel) {
+        this.user_channel = user_channel;
     }
 
     public Date getUser_application_time() {
@@ -603,6 +615,30 @@ public class DataLineItemEntity extends ESEntity {
         this.coupon_trigger_amount = coupon_trigger_amount;
     }
 
+    public Date getCoupon_create_time() {
+        return coupon_create_time;
+    }
+
+    public void setCoupon_create_time(Date coupon_create_time) {
+        this.coupon_create_time = coupon_create_time;
+    }
+
+    public Date getCoupon_update_time() {
+        return coupon_update_time;
+    }
+
+    public void setCoupon_update_time(Date coupon_update_time) {
+        this.coupon_update_time = coupon_update_time;
+    }
+
+    public String getCoupon_status() {
+        return coupon_status;
+    }
+
+    public void setCoupon_status(String coupon_status) {
+        this.coupon_status = coupon_status;
+    }
+
     public Boolean getAddress_is_default() {
         return address_is_default;
     }
@@ -633,14 +669,6 @@ public class DataLineItemEntity extends ESEntity {
 
     public void setAddress_area_id(String address_area_id) {
         this.address_area_id = address_area_id;
-    }
-
-    public Integer getSo_status() {
-        return so_status;
-    }
-
-    public void setSo_status(Integer so_status) {
-        this.so_status = so_status;
     }
 
     public Date getSo_delivery_time() {
@@ -729,6 +757,22 @@ public class DataLineItemEntity extends ESEntity {
 
     public void setCr_level(Integer cr_level) {
         this.cr_level = cr_level;
+    }
+
+    public String getCategory_name() {
+        return category_name;
+    }
+
+    public void setCategory_name(String category_name) {
+        this.category_name = category_name;
+    }
+
+    public String getCategory_type() {
+        return category_type;
+    }
+
+    public void setCategory_type(String category_type) {
+        this.category_type = category_type;
     }
 
     public String getCvs_name() {
