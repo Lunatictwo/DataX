@@ -91,7 +91,7 @@
         <!-- developing module -->
         <!--<module>hbasewriter</module>-->
         <module>es5xwriter</module>
-        <module>es5xreader</module>
+        <!--<module>es5xreader</module>-->
 
     </modules>
 
