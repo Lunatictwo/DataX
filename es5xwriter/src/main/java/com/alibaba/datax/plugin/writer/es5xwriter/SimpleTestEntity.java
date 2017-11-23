@@ -14,10 +14,12 @@ public class SimpleTestEntity extends EsEntity {
     private String uid;
     private JSONObject data_str;
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }

@@ -2,14 +2,14 @@
   "name": "es5xwriter",
   "parameter": {
     "esClusterName": "",
-    "esClusterIP": "192.168.0.2",
+    "esClusterIP": "192.168.0.1",
     "esClusterPort": "9300",
     "esEnableSniff": false,
     "esIndex": "user",
     "esType": "student",
-    "attributeNameString": "id,column1,column2,column3",
+    "attributeNameString": "id,create_time,uid,data_str",
     "attributeNameSplit": ",",
-    "className": "com.alibaba.datax.plugin.writer.es5xwriter.Student",
+    "className": "com.alibaba.datax.plugin.writer.es5xwriter.SimpleTestEntity",
     "urlFieldToParseJson": "data_str",
     "batchSize": "1000"
   }

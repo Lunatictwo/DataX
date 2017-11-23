@@ -1,8 +1,8 @@
 {
   "name": "es5xwriter",
-  "class": "com.alibaba.datax.plugin.writer.es5xwriter.ES5xWriter",
+  "class": "com.alibaba.datax.plugin.writer.es5xwriter.Es5xWriter",
   "description": {
-    "useScene": "for developer test.",
+    "useScene": "for es writer",
     "mechanism": "use datax framework to transport data to elasticsearch.",
     "warn": ""
   },
