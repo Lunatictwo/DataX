@@ -252,6 +252,24 @@ HdfsWriter提供向HDFS文件系统指定路径中写入TEXTFile文件和ORCFile
 
 	* 默认值：无压缩 <br />
 
+* **hadoopConfig**
+
+	* 描述：hadoopConfig里可以配置与Hadoop相关的一些高级参数，比如HA的配置。<br />
+
+		```json
+		"hadoopConfig":{
+		        "dfs.nameservices": "testDfs",
+		        "dfs.ha.namenodes.testDfs": "namenode1,namenode2",
+		        "dfs.namenode.rpc-address.aliDfs.namenode1": "",
+		        "dfs.namenode.rpc-address.aliDfs.namenode2": "",
+		        "dfs.client.failover.proxy.provider.testDfs": "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider"
+		}
+		```
+
+	* 必选：否 <br />
+
+ 	* 默认值：无 <br />
+
 * **encoding**
 
 	* 描述：写文件的编码配置。<br />

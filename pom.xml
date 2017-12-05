@@ -22,7 +22,7 @@
         <commons-lang3-version>3.3.2</commons-lang3-version>
         <commons-configuration-version>1.10</commons-configuration-version>
         <commons-cli-version>1.2</commons-cli-version>
-        <fastjson-version>1.1.43</fastjson-version>
+        <fastjson-version>1.1.46.sec01</fastjson-version>
         <guava-version>16.0.1</guava-version>
         <diamond.version>3.7.2.1-SNAPSHOT</diamond.version>
 
@@ -47,51 +47,51 @@
 
         <!-- reader -->
         <module>mysqlreader</module>
-        <!--<module>drdsreader</module>-->
-        <!--<module>sqlserverreader</module>-->
-        <!--<module>postgresqlreader</module>-->
-        <!--<module>oraclereader</module>-->
-        <!--<module>odpsreader</module>-->
-        <!--<module>otsreader</module>-->
-        <!--&lt;!&ndash; <module>otsstreamreader</module> &ndash;&gt;-->
-        <!--<module>txtfilereader</module>-->
-        <!--<module>hdfsreader</module>-->
-        <!--<module>streamreader</module>-->
-        <!--<module>hbasereader</module>-->
-        <!--<module>ossreader</module>-->
-        <!--<module>ftpreader</module>-->
-        <!--<module>mongodbreader</module>-->
-        <!--<module>rdbmsreader</module>-->
-        <!--<module>hbase11xreader</module>-->
-        <!--<module>hbase094xreader</module>-->
+        <module>drdsreader</module>
+        <module>sqlserverreader</module>
+        <module>postgresqlreader</module>
+        <module>oraclereader</module>
+        <module>odpsreader</module>
+        <module>otsreader</module>
+        <module>otsstreamreader</module>
+        <module>txtfilereader</module>
+        <module>hdfsreader</module>
+        <module>streamreader</module>
+        <module>ossreader</module>
+        <module>ftpreader</module>
+        <module>mongodbreader</module>
+        <module>rdbmsreader</module>
+        <module>hbase11xreader</module>
+        <module>hbase094xreader</module>
 
         <!-- writer -->
-        <!--<module>mysqlwriter</module>-->
-        <!--<module>drdswriter</module>-->
-        <!--<module>odpswriter</module>-->
-        <!--<module>txtfilewriter</module>-->
-        <!--<module>ftpwriter</module>-->
-        <!--<module>hdfswriter</module>-->
-        <!--<module>streamwriter</module>-->
-        <!--<module>otswriter</module>-->
-        <!--<module>oraclewriter</module>-->
-        <!--<module>sqlserverwriter</module>-->
-        <!--<module>postgresqlwriter</module>-->
-        <!--<module>osswriter</module>-->
-        <!--<module>mongodbwriter</module>-->
-        <!--<module>adswriter</module>-->
-        <!--<module>ocswriter</module>-->
-        <!--<module>rdbmswriter</module>-->
-        <!--<module>hbase11xwriter</module>-->
-        <!--<module>hbase094xwriter</module>-->
+        <module>mysqlwriter</module>
+        <module>drdswriter</module>
+        <module>odpswriter</module>
+        <module>txtfilewriter</module>
+        <module>ftpwriter</module>
+        <module>hdfswriter</module>
+        <module>streamwriter</module>
+        <module>otswriter</module>
+        <module>oraclewriter</module>
+        <module>sqlserverwriter</module>
+        <module>postgresqlwriter</module>
+        <module>osswriter</module>
+        <module>mongodbwriter</module>
+        <module>adswriter</module>
+        <module>ocswriter</module>
+        <module>rdbmswriter</module>
+        <module>hbase11xwriter</module>
+        <module>hbase094xwriter</module>
+        <module>hbase11xsqlwriter</module>
+        <module>es5xwriter</module>
 
-        <!-- some support module -->
+        <!-- common support module -->
         <module>plugin-rdbms-util</module>
         <module>plugin-unstructured-storage-util</module>
         <!-- developing module -->
         <!--<module>hbasewriter</module>-->
-        <module>es5xwriter</module>
-
+        
     </modules>
 
     <dependencyManagement>

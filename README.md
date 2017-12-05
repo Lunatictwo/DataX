@@ -4,7 +4,7 @@
 
 # DataX
 
-DataX 是阿里巴巴集团内被广泛使用的离线数据同步工具/平台，实现包括 MySQL、Oracle、SqlServer、Postgre、HDFS、Hive、ADS、HBase、OTS、ODPS 等各种异构数据源之间高效的数据同步功能。
+DataX 是阿里巴巴集团内被广泛使用的离线数据同步工具/平台，实现包括 MySQL、Oracle、SqlServer、Postgre、HDFS、Hive、ADS、HBase、TableStore(OTS)、MaxCompute(ODPS)、DRDS 等各种异构数据源之间高效的数据同步功能。
 
 
 
@@ -41,6 +41,7 @@ DataX目前已经有了比较全面的插件体系，主流的RDBMS数据库、N
 |              | Oracle     |     √     |     √     |
 |              | SqlServer  |     √     |     √     |
 |              | Postgresql |     √     |     √     |
+|              | DRDS |     √     |     √     |
 |              | 达梦         |     √     |     √     |
 | 阿里云数仓数据存储    | ODPS       |     √     |     √     |
 |              | ADS        |           |     √     |
@@ -62,7 +63,7 @@ DataX目前已经有了比较全面的插件体系，主流的RDBMS数据库、N
 
 核心Contributions:  光戈、一斅、祁然、云时
 
-感谢天烬、巴真对DataX做出的贡献。
+感谢天烬、巴真、静行对DataX做出的贡献。
 
 # License
 
@@ -70,6 +71,10 @@ This software is free to use under the Apache License [Apache license](https://g
 
 # 
 请及时提出issue给我们。请前往：[DataxIssue](https://github.com/alibaba/DataX/issues)
+
+# 开源版DataX企业用户
+
+![Datax-logo](https://github.com/alibaba/DataX/blob/master/images/datax-enterprise-users.jpg)
 
 ```
 长期招聘 联系邮箱：hanfa.shf@alibaba-inc.com

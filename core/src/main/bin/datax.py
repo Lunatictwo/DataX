@@ -200,7 +200,7 @@ def buildStartCommand(options, args):
 def printCopyright():
     print '''
 DataX (%s), From Alibaba !
-Copyright (C) 2010-2016, Alibaba Group. All Rights Reserved.
+Copyright (C) 2010-2017, Alibaba Group. All Rights Reserved.
 
 ''' % DATAX_VERSION
     sys.stdout.flush()

@@ -1,6 +1,0 @@
-{
-    "name": "hbasereader",
-    "class": "com.alibaba.datax.plugin.reader.hbasereader.HbaseReader",
-    "description": "useScene: prod. mechanism: Scan to read data.",
-    "developer": "alibaba"
-}

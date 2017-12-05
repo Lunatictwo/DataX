@@ -263,6 +263,22 @@ DataX 将数据直连ADS接口，利用ADS暴露的INSERT接口直写到ADS。�
  	
  	* 默认值：无 <br /> 
  
+ * **batchSize**
+
+	* 描述：ADS 提交数据写的批量条数，当writeMode为insert时，该值才会生效。
+	
+ 	* 必选：writeMode为insert时才有用 <br />  
+ 	
+ 	* 默认值：32 <br /> 
+
+* **bufferSize**
+
+	* 描述：DataX数据收集缓冲区大小，缓冲区的目的是攒一个较大的buffer，源头的数据首先进入到此buffer中进行排序，排序完成后再提交ads写。排序是根据ads的分区列模式进行的，排序的目的是数据顺序对ADS服务端更友好，出于性能考虑。bufferSize缓冲区中的数据会经过batchSize批量提交到ADS中，一般如果要设置bufferSize，设置bufferSize为batchSize数量的多倍。当writeMode为insert时，该值才会生效。
+	
+ 	* 必选：writeMode为insert时才有用 <br />  
+ 	
+ 	* 默认值：默认不配置不开启此功能 <br /> 
+ 
 
 ### 3.3 类型转换
 
