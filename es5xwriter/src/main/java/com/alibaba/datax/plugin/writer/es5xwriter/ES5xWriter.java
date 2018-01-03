@@ -14,7 +14,7 @@ import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,7 +152,7 @@ public class ES5xWriter extends Writer {
                         .build();
                 this.client = new PreBuiltTransportClient(esSettings);//初始化client较老版本发生了变化，此方法有几个重载方法，初始化插件等。
                 //此步骤添加IP，至少一个，其实一个就够了，因为添加了自动嗅探配置
-                client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(this.esClusterIP), this.esClusterPort));
+                client.addTransportAddress(new TransportAddress(InetAddress.getByName(this.esClusterIP), this.esClusterPort));
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
@@ -275,7 +275,8 @@ public class ES5xWriter extends Writer {
                 if (!"".equals(this.timeField)) {
                     entityJsonObj.add("@timestamp", entityJsonObj.get(this.timeField));
                 }
-                indexRequestBuilder.setSource(gson.toJson(entityJsonObj));
+                LinkedHashMap mapResult = gson.fromJson(entityJsonObj,LinkedHashMap.class);
+                indexRequestBuilder.setSource(mapResult);
 //                LOG.info(gson.toJson(entityJsonObj));
                 prepareBulk.add(indexRequestBuilder);
             }
